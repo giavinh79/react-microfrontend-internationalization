@@ -1,4 +1,4 @@
-# React Microfrontend & Webpack 5 Module Federation Setup
+# React Microfrontend & Webpack 5 Module Federation i18n Setup
 
 ## Description
 
@@ -29,11 +29,19 @@ For solving this, the `react-i18next` instance should be initialized in the main
 4. `react-mfe` initializes one namespace: `app`
 
 ## Results
+
 1. MFE *CAN* access namespaces from main application
 2. MFE *IS* able to add its namespace to the main i18n instance. It uses `addResourceBundle` which executes synchronously.
 
-## Improving
+## Additional Thoughts
 
-I went with the approach of using the `i18n` provider to pass the initialized `i18n` instance down to the MFE from the main application. However, there is a second approach which *could* be better.
+**1. The approach**
 
-**To investigate**: Pass the initialized i18n instance down to the MFE as a prop (or expose it through the main application), import it in `Microfrontend.tsx`, and dynamically trigger `addResourceBundle` using that imported instance outside of the component. This way we may no longer need the `useEffect and useState` logic in `Microfrontend.tsx` or the i18n `<Provider >` in the main app. It's important to consider that depending on different setups, some approaches may not work.
+I went with the approach of using the `i18n` provider to pass the initialized `i18n` instance down to the MFE from the main application. However, there may be other approaches to "exposing" this initialized `i18n` instance to any nested microfrontends.
+
+Example 1 - Expose the initialized i18n instance (similar to how we expose via module federation) which the MFE imports. It then uses this instance in `Microfrontend.tsx` to dynamically trigger `addResourceBundle` outside of the component lifecycle. This way it's possible that we may no longer need `useEffect and useState` logic in `Microfrontend.tsx` or the i18n `<Provider >` within the main app (however other config would be needed as described above and depending on certain setups with microfrontends, this approach may not work). Ultimately, I think I would recommend the current approach used within this POC as it was pretty straightforward and we can easily implement a loading state.
+
+**2. Performance**
+
+`addResourceBundle` should execute fairly fast but assuming that the MFE owns and supports many namespace translations & locales, we would need to execute `addResourceBundle` for each of them. There may be value in testing extremely large locale/translation files with the current set-up to see whether there's a discernible performance impact and how we could improve it.
+
