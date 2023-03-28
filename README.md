@@ -9,17 +9,19 @@ For solving this, the `react-i18next` instance should be initialized in the main
 ## Running
 
 1. Run the microfrontend (runs on `localhost:5000`)
-  - `cd react-mfe`
-  - `yarn`
-  - `yarn start`
-  - Since `react-mfe` leverages the `i18n` instance from `react-main-container`, it cannot run independently. Solving this is not within the scope of this POC.
+
+- `cd react-mfe`
+- `yarn`
+- `yarn start`
+- Since `react-mfe` leverages the `i18n` instance from `react-main-container`, it cannot run independently. Solving this is not within the scope of this POC.
 
 2. Run the main app (runs on `localhost:4000`)
-  - cd `react-main-container`
-  - `yarn`
-  - `yarn start`
 
-3. Click on button to toggle between English & French locales.
+- cd `react-main-container`
+- `yarn`
+- `yarn start`
+
+3. Go to `localhost:4000` & click on the button to toggle between English & French locales.
 
 ## Overview
 
@@ -30,8 +32,8 @@ For solving this, the `react-i18next` instance should be initialized in the main
 
 ## Results
 
-1. MFE *CAN* access namespaces from main application
-2. MFE *IS* able to add its namespace to the main i18n instance. It uses `addResourceBundle` which executes synchronously.
+1. MFE _CAN_ access namespaces from main application
+2. MFE _IS_ able to add its namespace to the main i18n instance. It uses `addResourceBundle` which executes synchronously.
 
 ## Additional Thoughts
 
@@ -44,4 +46,3 @@ Example 1 - Expose the initialized i18n instance (similar to how we expose via m
 **2. Performance**
 
 `addResourceBundle` should execute fairly fast but assuming that the MFE owns and supports many namespace translations & locales, we would need to execute `addResourceBundle` for each of them. There may be value in testing extremely large locale/translation files with the current set-up to see whether there's a discernible performance impact and how we could improve it.
-

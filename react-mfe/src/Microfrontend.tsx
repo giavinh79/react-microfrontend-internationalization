@@ -1,8 +1,8 @@
 import React, { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import mfeAppTranslationsEN from '../locales/en/app.json';
-import mfeAppTranslationsFR from '../locales/fr/app.json';
+import mfeAppTranslationsEN from '../public/locales/en/mfe.json';
+import mfeAppTranslationsFR from '../public/locales/fr/mfe.json';
 
 const Information = () => {
   const { t } = useTranslation();
