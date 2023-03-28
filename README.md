@@ -45,4 +45,4 @@ Example 1 - Expose the initialized i18n instance (similar to how we expose via m
 
 **2. Performance**
 
-`addResourceBundle` should execute fairly fast but assuming that the MFE owns and supports many namespace translations & locales, we would need to execute `addResourceBundle` for each of them. There may be value in testing extremely large locale/translation files with the current set-up to see whether there's a discernible performance impact and how we could improve it.
+`addResourceBundle` should execute fairly fast but assuming that the MFE owns and supports many namespace translations & locales, we would need to execute `addResourceBundle` for each of them. There may be value in testing extremely large locale/translation files with the current set-up to see whether there's a discernible performance impact and how we could improve it. Additionally, looking into lazy loading MFE translations is on the @TODO.
