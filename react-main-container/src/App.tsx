@@ -10,12 +10,12 @@ import i18n from '../public/locales/i18n';
 
 const App = () => {
   return (
-    <I18nextProvider i18n={i18n}>
-      <Suspense fallback={<>Loading...</>}>
+    <Suspense fallback={<>Loading...</>}>
+      <I18nextProvider i18n={i18n}>
         <MainPanel />
         <Microfrontend />
-      </Suspense>
-    </I18nextProvider>
+      </I18nextProvider>
+    </Suspense>
   );
 };
 
