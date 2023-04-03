@@ -1,8 +1,7 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import mfeAppTranslationsEN from '../public/locales/en/mfe.json';
-import mfeAppTranslationsFR from '../public/locales/fr/mfe.json';
+import { useLoadTranslation } from './useLoadTranslation';
 
 const Information = () => {
   const { t } = useTranslation();
@@ -23,14 +22,7 @@ const Information = () => {
 };
 
 export const Microfrontend = () => {
-  const [isLoaded, setIsLoaded] = React.useState(false);
-  const { i18n } = useTranslation();
-
-  useLayoutEffect(() => {
-    i18n.addResourceBundle('en', 'mfe', mfeAppTranslationsEN, true, false);
-    i18n.addResourceBundle('fr', 'mfe', mfeAppTranslationsFR, true, false);
-    setIsLoaded(true);
-  }, []);
+  const { isLoaded } = useLoadTranslation();
 
   return <div className='container'>{isLoaded && <Information />}</div>;
 };
