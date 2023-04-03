@@ -6,6 +6,8 @@ This is a simple POC repo for setting up a "main" React 17 app (`react-main-cont
 
 For solving this, the `react-i18next` instance should be initialized in the main React 17 application and then passed down to the React 17 MFE. The MFE will then dynamically add its own translations to this existing i18n instance.
 
+**@TODO** - throws console error when lazy loading translations on language change from main app (works fine though)
+
 ## Running
 
 1. Run the microfrontend (runs on `localhost:5000`)
@@ -45,4 +47,4 @@ Example 1 - Expose the initialized i18n instance (similar to how we expose via m
 
 **2. Performance**
 
-`addResourceBundle` should execute fairly fast but assuming that the MFE owns and supports many namespace translations & locales, we would need to execute `addResourceBundle` for each of them. There may be value in testing extremely large locale/translation files with the current set-up to see whether there's a discernible performance impact and how we could improve it. Additionally, looking into lazy loading MFE translations is on the @TODO.
+`addResourceBundle` should execute fairly fast but assuming that the MFE owns and supports many namespace translations & locales, we would need to execute `addResourceBundle` for each of them. There may be value in testing extremely large locale/translation files with the current set-up to see whether there's a discernible performance impact and how we could improve it.

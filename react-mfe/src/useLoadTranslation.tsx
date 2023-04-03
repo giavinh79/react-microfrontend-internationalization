@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const cache = new Set();
@@ -12,17 +12,34 @@ export const useLoadTranslation = (): UseLoadTranslationApi => {
   const [isLoaded, setIsLoaded] = useState(false);
   const { i18n } = useTranslation();
 
-  const lazyLoadTranslations = async (language: string) => {
-    for (const namespace of NAMESPACES) {
-      await import('../public/locales/' + language + `/${namespace}.json`)
-        .catch((error) => {
-          console.warn(error);
-        })
-        .then((translation) => {
-          return i18n.addResourceBundle(language, namespace, translation, true, false);
-        });
-    }
-  };
+  const lazyLoadTranslations = useCallback(
+    async (language: string) => {
+      for (const namespace of NAMESPACES) {
+        await import('../public/locales/' + language + `/${namespace}.json`)
+          .catch((error) => {
+            console.warn(error);
+          })
+          .then((translation) => {
+            return i18n.addResourceBundle(language, namespace, translation, true, false);
+          });
+      }
+    },
+    [i18n]
+  );
+
+  const languageChangedEventHandler = useCallback(
+    async (language) => {
+      if (cache.has(language)) {
+        return;
+      }
+
+      setIsLoaded(false);
+      cache.add(language);
+      await lazyLoadTranslations(language);
+      setIsLoaded(true);
+    },
+    [lazyLoadTranslations]
+  );
 
   useEffect(() => {
     (async () => {
@@ -32,7 +49,7 @@ export const useLoadTranslation = (): UseLoadTranslationApi => {
         setIsLoaded(true);
       }
 
-      i18n.on('languageChanged', async (language) => {
+      const languageChangedEventHandler = async (language: string) => {
         if (cache.has(language)) {
           return;
         }
@@ -41,9 +58,14 @@ export const useLoadTranslation = (): UseLoadTranslationApi => {
         cache.add(language);
         await lazyLoadTranslations(language);
         setIsLoaded(true);
-      });
+      };
+
+      i18n.on('languageChanged', languageChangedEventHandler);
+
+      // clean up
+      return () => i18n.off('languageChanged', languageChangedEventHandler);
     })();
-  }, []);
+  }, [i18n, languageChangedEventHandler, lazyLoadTranslations]);
 
   return {
     isLoaded,
