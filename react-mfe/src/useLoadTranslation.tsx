@@ -27,20 +27,6 @@ export const useLoadTranslation = (): UseLoadTranslationApi => {
     [i18n]
   );
 
-  const languageChangedEventHandler = useCallback(
-    async (language) => {
-      if (cache.has(language)) {
-        return;
-      }
-
-      setIsLoaded(false);
-      cache.add(language);
-      await lazyLoadTranslations(language);
-      setIsLoaded(true);
-    },
-    [lazyLoadTranslations]
-  );
-
   useEffect(() => {
     (async () => {
       if (cache.size === 0) {
@@ -65,7 +51,7 @@ export const useLoadTranslation = (): UseLoadTranslationApi => {
       // clean up
       return () => i18n.off('languageChanged', languageChangedEventHandler);
     })();
-  }, [i18n, languageChangedEventHandler, lazyLoadTranslations]);
+  }, [i18n, lazyLoadTranslations]);
 
   return {
     isLoaded,
