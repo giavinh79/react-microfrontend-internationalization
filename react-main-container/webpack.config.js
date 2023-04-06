@@ -69,6 +69,14 @@ module.exports = {
           singleton: true,
           requiredVersion: deps.i18next,
         },
+        'i18next-browser-languagedetector': {
+          singleton: true,
+          requiredVersion: deps['i18next-browser-languagedetector'],
+        },
+        'i18next-http-backend': {
+          singleton: true,
+          requiredVersion: deps['i18next-http-backend'],
+        },
       },
     }),
     new HtmlWebPackPlugin({

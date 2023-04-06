@@ -1,55 +1,62 @@
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-var-requires */
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 
-const deps = require("./package.json").dependencies;
+const deps = require('./package.json').dependencies;
 module.exports = {
   output: {
-    publicPath: "http://localhost:5000/",
+    publicPath: 'http://localhost:5000/',
   },
 
   resolve: {
-    extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
+    extensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],
   },
 
   devServer: {
     port: 5000,
     historyApiFallback: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+    },
   },
 
   module: {
     rules: [
       {
         test: /\.m?js/,
-        type: "javascript/auto",
+        type: 'javascript/auto',
         resolve: {
           fullySpecified: false,
         },
       },
       {
         test: /\.(css|s[ac]ss)$/i,
-        use: ["style-loader", "css-loader"],
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(ts|tsx|js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
         },
       },
       {
         test: /\.json$/,
         type: 'json',
-      }
+      },
     ],
   },
 
   plugins: [
     new ModuleFederationPlugin({
-      name: "reactMfe",
-      filename: "reactMicrofrontendEntry.js",
+      name: 'reactMfe',
+      filename: 'reactMicrofrontendEntry.js',
       remotes: {},
       exposes: {
-        "./microfrontend": "./src/Microfrontend.tsx"
+        './microfrontend': './src/Microfrontend.tsx',
       },
       shared: {
         ...deps,
@@ -57,14 +64,30 @@ module.exports = {
           singleton: true,
           requiredVersion: deps.react,
         },
-        "react-dom": {
+        'react-dom': {
           singleton: true,
-          requiredVersion: deps["react-dom"],
+          requiredVersion: deps['react-dom'],
+        },
+        'react-i18next': {
+          singleton: true,
+          requiredVersion: deps['react-i18next'],
+        },
+        i18next: {
+          singleton: true,
+          requiredVersion: deps.i18next,
+        },
+        'i18next-browser-languagedetector': {
+          singleton: true,
+          requiredVersion: deps['i18next-browser-languagedetector'],
+        },
+        'i18next-http-backend': {
+          singleton: true,
+          requiredVersion: deps['i18next-http-backend'],
         },
       },
     }),
     new HtmlWebPackPlugin({
-      template: "./src/index.html",
+      template: './src/index.html',
     }),
   ],
 };
