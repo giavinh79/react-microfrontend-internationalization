@@ -3,28 +3,6 @@ import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import HttpApi from 'i18next-http-backend';
 
-import appTranslationsEN from './en/app.json';
-import commonTranslationsEN from './en/common.json';
-import appTranslationsFR from './fr/app.json';
-import commonTranslationsFR from './fr/common.json';
-
-export enum Translations {
-  EN = 'en',
-  FR = 'fr',
-}
-
-// translation files
-const resources = {
-  [Translations.EN]: {
-    app: appTranslationsEN,
-    common: commonTranslationsEN,
-  },
-  [Translations.FR]: {
-    app: appTranslationsFR,
-    common: commonTranslationsFR,
-  },
-};
-
 // config and initialization
 i18n
   .use(HttpApi)
@@ -47,7 +25,7 @@ i18n
     defaultNS: 'app',
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
-    }
+    },
   });
 
 export default i18n;
