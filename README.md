@@ -48,3 +48,16 @@ Example 1 - Expose the initialized i18n instance (similar to how we expose via m
 **2. Performance**
 
 `addResourceBundle` should execute fairly fast but assuming that the MFE owns and supports many namespace translations & locales, we would need to execute `addResourceBundle` for each of them. There may be value in testing extremely large locale/translation files with the current set-up to see whether there's a discernible performance impact and how we could improve it.
+
+## Reference
+
+Sharing assets between MFE & Host and more:
+- https://github.com/module-federation/module-federation-examples/issues/697
+- https://github.com/manfredsteyer/module-federation-plugin-example/issues/21
+- https://stackoverflow.com/questions/71087541/angular-module-federation-how-can-i-make-static-files-assets-i18n-available
+- https://stackoverflow.com/questions/67633345/serving-styles-and-assets-with-webpack-5-module-federation
+- https://stackoverflow.com/questions/69192229/angular-mfe-webpack5-module-federation-image-path-issue
+- https://itsnotbugitsfeature.com/2022/03/13/sharing-common-assets-in-angulars-module-federation/
+- https://dev.to/waldronmatt/tutorial-a-guide-to-module-federation-for-enterprise-n5
+- https://scriptedalchemy.medium.com/micro-fe-architecture-webpack-5-module-federation-and-custom-startup-code-9cb3fcd066c
+- https://github.com/module-federation/module-federation-examples/issues/102
