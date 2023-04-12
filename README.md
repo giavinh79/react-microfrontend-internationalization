@@ -6,7 +6,7 @@ This is a simple POC repo for setting up a "main" React 17 app (`react-main-cont
 
 For solving this, the `react-i18next` instance should be initialized in the main React 17 application and then passed down to the React 17 MFE. The MFE will then dynamically add its own translations to this existing i18n instance.
 
-**@TODO** - throws console error when lazy loading translations on language change from main app (works fine though)
+See PR for example where i18n instances are decoupled between main app and MFE.
 
 ## Running
 
