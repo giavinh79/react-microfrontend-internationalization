@@ -24,9 +24,7 @@ mfeInstance
     ns: ['mfe'],
     defaultNS: 'mfe',
     backend: {
-      loadPath: () => {
-        return 'http://localhost:5000/locales/{{lng}}/{{ns}}.json'
-      },
+      loadPath: () => `${process.env.BASE_URL}/locales/{{lng}}/{{ns}}.json`,
     }
   });
 
