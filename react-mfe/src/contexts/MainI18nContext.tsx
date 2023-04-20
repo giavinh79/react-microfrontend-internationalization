@@ -1,11 +1,14 @@
 import React, { createContext, ReactNode } from 'react';
-import { i18n } from 'i18next';
+import type { i18n } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-// it can never actually be null within our MFE when consumed with createContext
-export const mainAppI18nContext = createContext<i18n>(null);
+interface MainAppI18n extends Omit<i18n, 't'> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  t: any;
+  // t: (key: string, options?: TOptionsBase) => string; // might need to do t: any instead because this t function may not be passable to other i18n functions/components
+}
+
+export const mainAppI18nContext = createContext<MainAppI18n>({} as i18n);
 
 export const MainAppI18nProvider = ({ children }: { children: ReactNode }) => {
   const { i18n: mainAppI18n } = useTranslation();

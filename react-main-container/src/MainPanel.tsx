@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const MainPanel = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation(['app', 'common']);
   const [isEnglish, setIsEnglish] = React.useState(i18n.language === 'en');
 
   const handleLocaleChange = () => {

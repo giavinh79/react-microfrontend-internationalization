@@ -28,6 +28,10 @@ appI18n
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
+    react: {
+      transSupportBasicHtmlNodes: true,
+      // transKeepBasicHtmlNodesFor: ['br', 'strong', 'i'],
+    },
   });
 
 export default appI18n;

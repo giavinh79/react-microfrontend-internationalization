@@ -25,7 +25,11 @@ mfeInstance
     defaultNS: 'mfe',
     backend: {
       loadPath: () => `${process.env.BASE_URL}/locales/{{lng}}/{{ns}}.json`,
-    }
+    },
+    react: {
+      transSupportBasicHtmlNodes: true,
+      // transKeepBasicHtmlNodesFor: ['br', 'strong', 'i'],
+    },
   });
 
 export default mfeInstance;

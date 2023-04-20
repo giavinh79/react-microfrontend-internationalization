@@ -49,3 +49,13 @@ Sharing assets between MFE & Host and more:
 - https://dev.to/waldronmatt/tutorial-a-guide-to-module-federation-for-enterprise-n5
 - https://scriptedalchemy.medium.com/micro-fe-architecture-webpack-5-module-federation-and-custom-startup-code-9cb3fcd066c
 - https://github.com/module-federation/module-federation-examples/issues/102
+
+## Typescript Integration
+
+To add intellisense for internationalization, we can add a `i18next.d.ts` namespace that uses our locale files to add type safety to the `t` function.
+
+However, in a MFE architecture with separate i18n instances, TypeScript is a lot more difficult to configure.
+Based on comments in the repo, there does not appear to be official support for this type of situation -
+`www.github.com/i18next/react-i18next/issues/726#issuecomment-1499882853`
+
+For example, there is no real way to enable full type safety when you are using translations from the host within the MFE unless it has access to that package somehow (i.e. maybe a `npm package`, maybe we have a monorepo set up where we can directly import it...etc.). For the sake of this POC, we will assume MFEs may exist within their own repo so it's more limiting. It may be worth investigating tools like https://github.com/module-federation/universe/tree/main/packages/typescript or other approaches like in https://spin.atomicobject.com/2022/07/19/typescript-federated-modules/ but based on initial reading, they don't seem like reliable solutions to the problem above.
