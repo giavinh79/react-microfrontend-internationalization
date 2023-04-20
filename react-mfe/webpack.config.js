@@ -7,7 +7,8 @@ const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPl
 const deps = require('./package.json').dependencies;
 
 module.exports = () => {
-  const MFE_PUBLIC_PATH = 'http://localhost:5000/';
+  const PORT = 5000;
+  const MFE_PUBLIC_PATH = `http://localhost:${PORT}/`;
 
   return {
     output: {
@@ -19,7 +20,7 @@ module.exports = () => {
     },
 
     devServer: {
-      port: 5000,
+      port: PORT,
       historyApiFallback: true,
       headers: {
         'Access-Control-Allow-Origin': '*',
@@ -58,7 +59,7 @@ module.exports = () => {
     plugins: [
       new ModuleFederationPlugin({
         name: 'reactMfe',
-        filename: 'reactMicrofrontendEntry.js',
+        filename: 'remoteEntry.js',
         remotes: {},
         exposes: {
           './microfrontend': './src/Microfrontend.tsx',
