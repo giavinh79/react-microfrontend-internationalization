@@ -27,7 +27,7 @@ appI18n
     defaultNS: 'app',
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
-    }
+    },
   });
 
 export default appI18n;

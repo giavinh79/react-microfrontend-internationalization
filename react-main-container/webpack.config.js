@@ -49,7 +49,7 @@ module.exports = {
       name: 'reactMainContainer',
       filename: 'reactMainContainer.js',
       remotes: {
-        reactMfe: 'reactMfe@http://localhost:5000/reactMicrofrontendEntry.js',
+        reactMfe: 'reactMfe@http://localhost:5000/remoteEntry.js',
       },
       exposes: {},
       shared: {

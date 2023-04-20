@@ -5,6 +5,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 
 const deps = require('./package.json').dependencies;
+
 module.exports = () => {
   const MFE_PUBLIC_PATH = 'http://localhost:5000/';
 
