@@ -62,3 +62,23 @@ As mentioned above although typescript integration is straightforward in the hos
 Since the goal of this POC is to also assume that MFEs are in their own repo, it's difficult to enable full type safety for host app translations (i.e. if it was a monorepo for example, it could have access to directly import those types/translation files). There are some tools/approaches like https://github.com/module-federation/universe/tree/main/packages/typescript, npm packages, and https://spin.atomicobject.com/2022/07/19/typescript-federated-modules/ for sharing assets across federated modules but this does add complexity and isn't guaranteed to work due to how TypeScript works with `i18-next` (where you augment types in a single `.d.ts` file) + us using multiple i18n instances. This requires us to maybe rethink our approach of having multiple i18n instances.
 
 Assuming we want the MFE to have access to host app translations, there are mainly two approaches. The first one assumes you want to keep separate i18n instances in which case it may be better to forego typescript integration for the microfrontend to avoid running into edge cases and annoyances with typing host app translations. In the past, I've used `react-i18next` without their TypeScript integration functionality and it works fine because in a typical workflow, you will usually just add a key-value to the locale file and paste the key wherever you need it. Additionally, through QA, tests, and certain extensions like `i18n Ally` typos or missing keys can be discovered. Alternatively, if we decide it's fine to have a single `i18n` instance, we could merge host translations into the MFE `i18n` instance and then manually type namespaces for the host translations - for simplicity it may be possible to just type the namespace so that any strings can be accepted (so it doesn't have intellisense but errors if strings aren't passed in the `t` function for example). Alternatively, since host translations get dynamically loaded into the MFE instance at run-time, the only way to have full type safety for host translations is for the MFE to have a "synced copy" of the host app locale files whether this is through an `npm package` or some process to pull in those files from the host app copy.
+
+## Testing
+
+Assuming (react-testing-library)[https://testing-library.com/docs/react-testing-library/setup/] and Jest is being used, some relevant docs are:
+- https://react.i18next.com/misc/testing
+- https://jestjs.io/docs/configuration
+- https://codesandbox.io/s/kentcdoddsreact-testing-library-examples-pl10s?file=/src/__tests__/i18next.js
+- https://github.com/i18next/react-i18next/tree/master/example/test-jest
+
+Ultimately there are two different approaches we can go with for setting up our tests to work with `i18next`. We can either choose to:
+
+1. Mock i18n and related functionalities
+ - If we decide to mock i18n, then in the testing DOM any text will just appear as `i18n` translation keys. A test assertion may look like `screen.getByText('GREETING')`
+2. Do not mock i18n and translate text in tests
+ - So now your assertions on any text will look like: `screen.getByText('Welcome to the application!')`
+ - Or alternatively, if you import the JSON translations file, it could look like `screen.getByText(ENCommonTranslations.GREETING)`
+
+I lean towards option 2 as it gives more confidence that things are working (that translation key actually has an associated translation & i18n is set up correctly). Additionally, I prefer importing the JSON translations file, as it keeps things concise, it's automatically synced to the translations so if you update the translation you don't need to update the test (some people may see this as con), and finally you can easily `ctrl-click` the JSON key to go directly to that translation (nice DX).
+
+
