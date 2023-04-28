@@ -9,9 +9,9 @@ const TestComponentForInterpolation = () => {
   return <>{':)'}</>;
 };
 
-const Information = () => {
+export const Information = () => {
   const { t } = useTranslation(['mfe', 'error']);
-  const mainAppI18n = useContext(mainAppI18nContext);
+  // const mainAppI18n = useContext(mainAppI18nContext);
 
   return (
     <div
@@ -23,8 +23,8 @@ const Information = () => {
         padding: '1rem',
       }}
     >
-      <p>{t('mfe:GREETING')}</p>
-      <p>The MFE is able to use translations from the host such as: {mainAppI18n.t('common:NAME')}</p>
+      <p>{t('GREETING', { ns: 'mfe' })}</p>
+      {/* <p>The MFE is able to use translations from the host such as: {mainAppI18n.t('common:NAME')}</p> */}
 
       <p>
         {
@@ -32,7 +32,7 @@ const Information = () => {
         }
       </p>
       {/* TypeScript won't complain as long as we pass in our `t` function as shown below */}
-      <p>
+      <p data-testid='interpolation-example'>
         <Trans t={t} i18nKey='error:GENERIC_ERROR' components={{ smiley: <TestComponentForInterpolation /> }} />
       </p>
 
