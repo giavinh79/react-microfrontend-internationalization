@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
+const fs = require('fs');
 const path = require('path');
 
 module.exports = {
@@ -26,10 +27,14 @@ module.exports = {
     'i18n-json/identical-keys': [
       2,
       {
-        filePath: {
-          'error.json': path.resolve('./public/locales/en/error.json'),
-          'mfe.json': path.resolve('./public/locales/en/mfe.json'),
-        },
+        filePath: (function getFilePath() {
+          const pathToLocales = './public/locales/en';
+          const filesArray = fs.readdirSync(pathToLocales);
+          return filesArray.reduce((acc, file) => {
+            acc[file] = path.resolve(`${pathToLocales}/${file}`);
+            return acc;
+          }, {});
+        })(),
       },
     ],
     'i18n-json/valid-message-syntax': 0,
