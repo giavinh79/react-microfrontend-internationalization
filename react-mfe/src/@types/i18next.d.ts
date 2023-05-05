@@ -9,6 +9,9 @@ declare module 'i18next' {
     resources: {
       mfe: typeof import('../../public/locales/en/mfe.json');
       error: typeof import('../../public/locales/en/error.json');
+      'host-common': {
+        [key: string]: string;
+      };
     };
   }
 }
