@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 
@@ -69,10 +70,24 @@ module.exports = {
           singleton: true,
           requiredVersion: deps.i18next,
         },
+        'i18next-browser-languagedetector': {
+          singleton: true,
+          requiredVersion: deps['i18next-browser-languagedetector'],
+        },
+        'i18next-http-backend': {
+          singleton: true,
+          requiredVersion: deps['i18next-http-backend'],
+        },
       },
     }),
     new HtmlWebPackPlugin({
       template: './src/index.html',
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('development'),
+        BASE_URL: JSON.stringify('http://localhost:4000/'),
+      },
     }),
   ],
 };
