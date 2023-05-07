@@ -75,10 +75,10 @@ Ultimately there are two different approaches we can go with for setting up our 
 
 1. Mock i18n and related functionalities
  - If we decide to mock i18n, then in the testing DOM any text will just appear as `i18n` translation keys. A test assertion may look like `screen.getByText('GREETING')`
+ - Implementation wise, assuming `jest`, create a `react-i18next.js` in a `__mocks__` folder and fill it with the following content: [https://github.com/i18next/react-i18next/blob/master/example/test-jest/src/__mocks__/react-i18next.js](react-i18next.js).
 2. Do not mock i18n and translate text in tests
- - So now your assertions on any text will look like: `screen.getByText('Welcome to the application!')`
- - Or alternatively, if you import the JSON translations file, it could look like `screen.getByText(ENCommonTranslations.GREETING)`
+ - Assertions on text will look like: `screen.getByText('Welcome to the application!')` or `screen.getByText(ENCommonTranslations.GREETING)` (if you directly import the JSON translations file)
 
-I lean towards option 2 as it gives more confidence that things are working (that translation key actually has an associated translation & i18n is set up correctly). Additionally, I prefer importing the JSON translations file, as it keeps things concise, it's automatically synced to the translations so if you update the translation you don't need to update the test (some people may see this as con), and finally you can easily `ctrl-click` the JSON key to go directly to that translation (nice DX).
+This project uses option 2 as it gives more confidence that things are working (the translation key actually has an associated translation & i18n is set up correctly).In addition, where possible, importing the JSON translations file to use in assertions keeps things concise, is synced to the translation so if you update the translation the test still works fine, and you can easily `ctrl-click` to go directly to that translation (nice DX). However for more complex translations with interpolation (i.e. "Welcome {{ name }} to the app") you cannot rely on just importing this translation from the JSON file in your test and will need to explicitly write out the string.
 
 

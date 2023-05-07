@@ -16,7 +16,6 @@ export const DEFAULT_I18N_CONFIG: InitOptions = {
   defaultNS: 'mfe',
   react: {
     transSupportBasicHtmlNodes: true,
-    // transKeepBasicHtmlNodesFor: ['br', 'strong', 'i'],
   },
 };
 
@@ -26,7 +25,6 @@ mfeInstance
   // detect user language
   // learn more: https://github.com/i18next/i18next-browser-languageDetector
   .use(LanguageDetector)
-  // .use(initReactI18next)
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
