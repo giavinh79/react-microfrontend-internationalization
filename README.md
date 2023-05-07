@@ -2,10 +2,9 @@
 
 ## Description
 
-This is a simple POC repo for setting up a "main" React 17 app (`react-main-container`) which consumes a React 17 microfrontend (`react-mfe`) using Webpack 5 module federation. The main purpose of this POC is to investigate internationalization (`react-i18next`) with this type of setup - and whether it is possible to colocate apps and their relevant translations (i.e. MFE owns its relevant translations).
+This is a simple POC repo for setting up a "main" React 17 app (`react-main-container`) which consumes a React 17 microfrontend (`react-mfe`) using Webpack 5 module federation. The main purpose of this POC is to investigate internationalization (`react-i18next`) with this type of setup for the best compromise between colocated MFE translations, TypeScript support, and ideal testing.
 
-For a history of different approaches and tradeoffs, see commit history. Ultimately this repo represents an architecture where MFEs own their own i18n instances for more flexibility and independence (rather than pass down the i18n instance from the host to the MFE to be shared). MFE translations will be colocated.
-Alternatively, we may prefer having more independent MFEs where they manage their own i18n instance setup. Although it will no longer (out of the box) sync language changes from the main app and config, we now have boundaries between different apps and can avoid problems with having a "global" i18n instance (mutations and conflicts). See PR for example where i18n instances are decoupled between main app and MFE: https://github.com/giavinh79/react-microfrontend-internationalization/pull/2
+For a history of different approaches and tradeoffs, see commit history. Ultimately the current state of the repo represents an architecture where MFEs own their own i18n instances for more flexibility and independence (rather than pass down the i18n instance from the host to the MFE to be shared). The MFE also is able to remain in sync with the host app instance on language changes and can also access some of its translations if necessary (at the cost of less typesafety for those translations and having to mock those translations in tests).
 
 ## Running
 
@@ -24,17 +23,17 @@ Alternatively, we may prefer having more independent MFEs where they manage thei
 
 3. Go to `localhost:4000` & click on the button to toggle between English & French locales.
 
+## Linting
+
+1. `yarn lint`
+2. `yarn lint:i18n` for ensuring translation files in different locales for that app have identical keys, are sorted alphabetically, and follow a proper format.
+
 ## Overview
 
-1. The main application, `react-main-container`, defines in `webpack.config.js` microfrontends it will consume.
+1. The main application, `react-main-container`, defines in `webpack.config.js`what microfrontends it will consume.
 2. The MFE, `react-mfe`, exposes `Microfrontend.tsx` in `webpack.config.js` so that it can be imported by `react-main-container`.
 3. `react-main-container` initializes two namespaces: `common` and `app`
-4. `react-mfe` initializes one namespace: `app`
-
-## Results
-
-1. MFE _CAN_ access namespaces from main application
-2. MFE _IS_ able to add its namespace to the main i18n instance. It uses `addResourceBundle` which executes synchronously.
+4. `react-mfe` initializes three namespaces: `mfe`, `error`, and `host-common` (a namespace loaded from host into MFE)
 
 ## Reference
 
@@ -60,7 +59,7 @@ As mentioned above although typescript integration is straightforward in the hos
 
 Since the goal of this POC is to also assume that MFEs are in their own repo, it's difficult to enable full type safety for host app translations (i.e. if it was a monorepo for example, it could have access to directly import those types/translation files). There are some tools/approaches like https://github.com/module-federation/universe/tree/main/packages/typescript, npm packages, and https://spin.atomicobject.com/2022/07/19/typescript-federated-modules/ for sharing assets across federated modules but this does add complexity and isn't guaranteed to work due to how TypeScript works with `i18-next` (where you augment types in a single `.d.ts` file) + us using multiple i18n instances. This requires us to maybe rethink our approach of having multiple i18n instances.
 
-Assuming we want the MFE to have access to host app translations, there are mainly two approaches. The first one assumes you want to keep separate i18n instances in which case it may be better to forego typescript integration for the microfrontend to avoid running into edge cases and annoyances with typing host app translations. In the past, I've used `react-i18next` without their TypeScript integration functionality and it works fine because in a typical workflow, you will usually just add a key-value to the locale file and paste the key wherever you need it. Additionally, through QA, tests, and certain extensions like `i18n Ally` typos or missing keys can be discovered. Alternatively, if we decide it's fine to have a single `i18n` instance, we could merge host translations into the MFE `i18n` instance and then manually type namespaces for the host translations - for simplicity it may be possible to just type the namespace so that any strings can be accepted (so it doesn't have intellisense but errors if strings aren't passed in the `t` function for example). Alternatively, since host translations get dynamically loaded into the MFE instance at run-time, the only way to have full type safety for host translations is for the MFE to have a "synced copy" of the host app locale files whether this is through an `npm package` or some process to pull in those files from the host app copy.
+Assuming we want the MFE to have access to host app translations, there are mainly two approaches. The first approach assumes you want to keep separate i18n instances (the host app i18n instance is passed to MFE and consumed with React Context) in which case it may be better to forego typescript integration for the microfrontend to avoid running into edge cases and annoyances with typing host app translations. Alternatively, we have a single `i18n` instance in the MFE that dynamically loads in host translations and then we manually type namespaces for the host translations. For simplicity we can type the namespace so that for that namespace any strings can be accepted (so it doesn't have full type safety but errors if strings aren't passed in the `t` function for example) - this is done in the current POC. Alternatively, since host translations get dynamically loaded into the MFE instance at run-time, the only way to have full type safety for host translations is for the MFE to have a "synced copy" of the host app locale files whether this is through an `npm package` or some process to pull in those files from the host app copy.
 
 ## Testing
 
