@@ -4,8 +4,7 @@
 
 This is a simple POC repo for setting up a "main" React 17 app (`react-main-container`) which consumes a React 17 microfrontend (`react-mfe`) using Webpack 5 module federation. The main purpose of this POC is to investigate internationalization (`react-i18next`) with this type of setup - and whether it is possible to colocate apps and their relevant translations (i.e. MFE owns its relevant translations).
 
-For solving this, one approach can be where the `react-i18next` instance is initialized in the main React 17 application and then passed down to the React 17 MFE. The MFE will then dynamically add its own translations to this existing i18n instance. Effectively, they have a "shared" i18 instance.
-
+For a history of different approaches and tradeoffs, see commit history. Ultimately this repo represents an architecture where MFEs own their own i18n instances for more flexibility and independence (rather than pass down the i18n instance from the host to the MFE to be shared). MFE translations will be colocated.
 Alternatively, we may prefer having more independent MFEs where they manage their own i18n instance setup. Although it will no longer (out of the box) sync language changes from the main app and config, we now have boundaries between different apps and can avoid problems with having a "global" i18n instance (mutations and conflicts). See PR for example where i18n instances are decoupled between main app and MFE: https://github.com/giavinh79/react-microfrontend-internationalization/pull/2
 
 ## Running
