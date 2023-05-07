@@ -1,5 +1,5 @@
 import { i18n } from 'i18next';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 interface UseTranslationSyncProps {
   /**
