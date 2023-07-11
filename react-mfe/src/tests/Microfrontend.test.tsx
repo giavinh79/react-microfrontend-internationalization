@@ -1,12 +1,14 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 
-import { renderWithTestI18n, screen } from './test-utils';
+import { renderWithTestI18n, screen, testI18nInstance } from './test-utils';
 import { Information } from '../components/Information';
 import enMfeTranslations from '../../public/locales/en/mfe.json';
 
 describe('Microfrontend Information', () => {
   beforeEach(() => {
+    console.log('new');
+    console.log(testI18nInstance.getResourceBundle('en', 'error'));
     renderWithTestI18n(<Information />);
   });
 
